@@ -35,31 +35,49 @@ namespace CSharp_Net_module1_7_1_lab
         {
             Directory.CreateDirectory(nameOfDirectory);
         }
-        public void WriteData(Computer[] data)
+        public void WriteData(List<Computer> data)
         {
             string filename = "SomeText.txt";
             using (FileStream fs = File.Open(CurrentPath + filename, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 StreamWriter streamWriter = new StreamWriter(fs);
-                streamWriter.Write(data);
+                for (int i = 0; i < data.Count; ++i)
+                {
+                    streamWriter.Write(data[i].ToString());
+                }
             }
         }
-        public Computer [] ReadData()
+        public List<Computer> ReadData()
         {
-
+            List<Computer> computers = new List<Computer>(); 
+            string filename = "SomeText.txt";
+            using (FileStream fs = File.Open(CurrentPath + filename, FileMode.OpenOrCreate, FileAccess.Read))
+            {
+                char[] separators = new char[] { ' ', '\n' };
+                StreamReader streamReader = new StreamReader(fs);
+                for (int i = 0; streamReader.ReadLine() != null; ++i)
+                {
+                    string[] props;
+                    props = streamReader.ReadLine().Split(separators, 4);
+                        Computer computer = new Computer(Convert.ToInt32(props[0]), Convert.ToDouble(props[1]),
+                            Convert.ToInt32(props[2]), Convert.ToInt32(props[3]));
+                    computers.Add(computer);
+                }
+            }
+            return computers;
         }
         public void WriteZip(Computer[] data )
         {
 
         }
-        public Computer [] ReadZip()
-        {
+        //public Computer [] ReadZip()
+        //{
 
-        }
-        public Task ReadAsync()
-        {
+        //}
+        //public Task ReadAsync()
+        //{
 
-        }
+        //}
         // 2) declare public methods:
         //ChangeLocation() - change of CurrentPath; 
         // method takes new file path as parameter, creates new directories (if it is necessary)

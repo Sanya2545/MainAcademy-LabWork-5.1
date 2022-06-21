@@ -11,6 +11,20 @@ namespace CSharp_Net_module1_7_1_lab
     {
         static void Main(string[] args)
         {
+            List<Computer> computers = new List<Computer> { new Computer(), new Computer(), new Computer(), new Computer(), new Computer()};
+            InOutOperation operations = new InOutOperation();
+            for (int i = 0; i < computers.Count; ++i)
+            {
+                Console.WriteLine(computers[i]);
+            }
+            Console.WriteLine("Working method : Write data !");
+            operations.WriteData(computers);
+            Console.WriteLine("Working method : Read data !");
+            computers = operations.ReadData();
+            for(int i = 0; i < computers.Count; ++i)
+            {
+                Console.WriteLine(computers[i]);
+            }
             // 3) create collection of computers;
             // set path to file and file name
 
