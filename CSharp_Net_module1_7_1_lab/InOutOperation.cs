@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace CSharp_Net_module1_7_1_lab
 {
@@ -33,38 +34,43 @@ namespace CSharp_Net_module1_7_1_lab
         }
         public void CreateDirectory (string nameOfDirectory)
         {
+            if(Directory.Exists(nameOfDirectory))
+            {
+                return;
+            }
             Directory.CreateDirectory(nameOfDirectory);
         }
-        public void WriteData(List<Computer> data)
+        public void WriteDataJson(List<Computer> data, string filename)
         {
-            string filename = "SomeText.txt";
-            using (FileStream fs = File.Open(CurrentPath + filename, FileMode.OpenOrCreate, FileAccess.Write))
+            CurrentFile = filename;
+            string strJson = " "; 
+            using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 StreamWriter streamWriter = new StreamWriter(fs);
                 for (int i = 0; i < data.Count; ++i)
                 {
-                    streamWriter.Write(data[i].ToString());
+                    strJson = JsonConvert.SerializeObject(data[i]);
+                    streamWriter.Write(strJson);
                 }
             }
         }
-        public List<Computer> ReadData()
+        public List<Computer> ReadDataJson(string filename)
         {
-            List<Computer> computers = new List<Computer>(); 
-            string filename = "SomeText.txt";
-            using (FileStream fs = File.Open(CurrentPath + filename, FileMode.OpenOrCreate, FileAccess.Read))
+            List<Computer> data = new List<Computer>();
+            if (File.Exists(filename))
             {
-                char[] separators = new char[] { ' ', '\n' };
-                StreamReader streamReader = new StreamReader(fs);
-                for (int i = 0; streamReader.ReadLine() != null; ++i)
+                using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
                 {
-                    string[] props;
-                    props = streamReader.ReadLine().Split(separators, 4);
-                        Computer computer = new Computer(Convert.ToInt32(props[0]), Convert.ToDouble(props[1]),
-                            Convert.ToInt32(props[2]), Convert.ToInt32(props[3]));
-                    computers.Add(computer);
+                    StreamReader streamReader = new StreamReader(fs);
+                    string strJson = streamReader.ReadToEnd();
+                    data = JsonConvert.DeserializeObject<List<Computer>>(strJson);
                 }
             }
-            return computers;
+            else
+            {
+                throw new ArgumentException("This file does not exists, you can't read it !");
+            }
+            return data;
         }
         public void WriteZip(Computer[] data )
         {

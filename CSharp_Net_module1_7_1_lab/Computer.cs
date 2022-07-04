@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSharp_Net_module1_7_1_lab
 {
+    [Serializable]
     class Computer
     {
         public int Cores { get; set; }
@@ -21,8 +22,7 @@ namespace CSharp_Net_module1_7_1_lab
         }
         public override string ToString()
         {
-            return "\nCores : " + Cores + "\nFrequency : " + Frequency
-                + "\nMemory : " + Memory + "\nHdd : " + Hdd;
+            return $"\nCores : {Cores},  Frequency : {Frequency}, Memory : {Memory}, Hdd : {Hdd}";
         }
     }
 }
