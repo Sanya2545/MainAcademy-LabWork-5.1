@@ -12,22 +12,21 @@ namespace CSharp_Net_module1_7_1_lab
         static void Main(string[] args)
         {
             string filename = "Computers.json";
-            List<Computer> computers = new List<Computer> { new Computer(1, 2500, 4, 500), new Computer(2, 3200, 8, 1000)};
+            string zipFileName = "result.zip";
+            List<Computer> list = new List<Computer> { new Computer(50, 4000, 8, 2000), new Computer(51, 5800, 16, 8000)};
             InOutOperation operations = new InOutOperation();
-            for (int i = 0; i < computers.Count; ++i)
-            {
-                Console.WriteLine(computers[i]);
-            }
-            Console.WriteLine("Working method : Write data !");
-            operations.WriteDataJson(computers, filename);
-            Console.WriteLine("Working method : Read data !");
-            computers = operations.ReadDataJson(filename);
-            foreach (var item in computers)
-            {
-                if(item != null)
+            //operations.WriteDataObjectJson(list[0], filename);
+           // operations.WriteDataObjectJson(list[1], filename);
+            //Console.WriteLine("Worked method : Write data !"); 
+            list = operations.ReadDataJson(filename);
+            Console.WriteLine("Worked method : Read data !");
+            foreach (var item in list)
+            { 
                 Console.WriteLine(item);
-                return;
             }
+            operations.WriteZip(list, filename);
+            Console.WriteLine(operations.ReadZip());
+            
             // 3) create collection of computers;
             // set path to file and file name
 
