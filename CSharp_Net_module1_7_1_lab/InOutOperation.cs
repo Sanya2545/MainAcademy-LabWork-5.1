@@ -102,10 +102,37 @@ namespace CSharp_Net_module1_7_1_lab
             ZipFile.ExtractToDirectory(zipFile, extractFolder);
             return ReadDataJson(extractFolder + @"\" + filename);
         }
-        //public Task ReadAsync()
-        //{
-
-        //}
+        public async Task<List<Computer>>ReadDataJsonAsync(string filename)
+        {
+            List<Computer> computers = new List<Computer>();
+            if (File.Exists(filename))
+            {
+                using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                {
+                    StreamReader streamReader = new StreamReader(fs);
+                    List<string> stringsJson = new List<string>();
+                    string text = await streamReader.ReadToEndAsync();
+                    stringsJson = text.Split('\n')
+                        .ToList();
+                    foreach (string item in stringsJson)
+                    {
+                        if (item == null)
+                        {
+                            break;
+                        }
+                        computers.Add(JsonConvert.DeserializeObject<Computer>(item));
+                    }
+                    //JsonConvert.DeserializeObject<List<Computer>>(stringsJson.ToString());
+                    //computers = JsonConvert.DeserializeObject<List<Computer>>(streamReader.ReadToEnd());
+                    streamReader.Close();
+                }
+            }
+            else
+            {
+                throw new ArgumentException("This file does not exists, you can't read it !");
+            }
+            return computers;
+        }
         // 2) declare public methods:
         //ChangeLocation() - change of CurrentPath; 
         // method takes new file path as parameter, creates new directories (if it is necessary)
@@ -130,7 +157,56 @@ namespace CSharp_Net_module1_7_1_lab
         // use ReadLineAsync() method to read data from file
         // Note: don't forget about await
 
-        // 7)
+        // Task 7) ADVANCED
+
+
+
+        public FileStream WriteToMemoryStream(Computer data, string filename)
+        {
+            MemoryStream ms = new MemoryStream();
+            string text = data.ToString();
+            byte[] bytes = UnicodeEncoding.Unicode.GetBytes(text);
+            ms.Write(bytes, 0, bytes.Length);
+            FileStream fs = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            ms.WriteTo(fs);
+            ms.Close();
+            return fs;
+        }
+        public string WriteToFileFromMemoryStream(FileStream fs = null)
+        {
+            if (fs != null)
+            {
+                if (fs.CanWrite)
+                {
+                    StreamWriter sw = new StreamWriter(fs);
+                    sw.WriteLine();
+                }
+                else
+                {
+                    return "\nYou can't write to the stream !!!\n";
+                }
+                if (fs.CanRead)
+                {
+                    StreamReader sr = new StreamReader(fs);
+                    string text = sr.ReadToEnd();
+                    sr.Close();
+                    return text;
+                }
+                else
+                {
+                    return "\nYou can't read from this stream !!!\n";
+                }
+
+            }
+            else
+            {
+                throw new NullReferenceException("File stream is null !!!");
+            }
+        }
+
+
+
+
         // ADVANCED:
         // WriteToMemoryStream() – save data to memory stream
         // method takes data (info about computers) as parameter
