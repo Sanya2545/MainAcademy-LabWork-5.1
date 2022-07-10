@@ -15,8 +15,8 @@ namespace CSharp_Net_module1_7_1_lab
         public string CurrentPath { get; set; }
         public string CurrentDirectory { get; set; }
         public string CurrentFile{ get; set; }
-        string ZipPath = "rezult.zip";
-        string extractPath = "extract";
+        string zipFile = "rezult.zip";
+        string extractFolder = "extract";
         // 1) declare properties  CurrentPath - path to file (without name of file), CurrentDirectory - name of current directory,
         // CurrentFile - name of current file
         private List<Computer> computers = new List<Computer>();
@@ -26,8 +26,8 @@ namespace CSharp_Net_module1_7_1_lab
             CurrentPath = directoryInfo.FullName;
             CurrentDirectory = directoryInfo.Name;
             CurrentFile = "CSharp_Net_module1_7_1_lab.exe";
-            ZipPath = "result.zip";
-            extractPath = "extract.json";
+            zipFile = "result.zip";
+            extractFolder = "extract.json";
         }
         public void ChangeLocation(string filepath)
         {
@@ -68,6 +68,10 @@ namespace CSharp_Net_module1_7_1_lab
                     stringsJson = streamReader.ReadToEnd().Split('\n').ToList();
                     foreach(string item in stringsJson)
                     {
+                        if(item == null)
+                        {
+                            break;
+                        }
                         computers.Add(JsonConvert.DeserializeObject<Computer>(item));
                     }
                     //JsonConvert.DeserializeObject<List<Computer>>(stringsJson.ToString());
@@ -83,20 +87,20 @@ namespace CSharp_Net_module1_7_1_lab
         }
         public void WriteZip(List<Computer> data, string filename, FileMode fileMode = FileMode.OpenOrCreate)
         {
-            string zipFolderName = "ZipFolder";
-            string zipFolderPath = CurrentPath + @"\" + zipFolderName;
+            string zipFolder = "result";
+            string zipFolderPath = CurrentPath + @"\" + zipFolder;
             Directory.CreateDirectory(zipFolderPath);
             for (int i = 0; i < data.Count; ++i)
             {
                 WriteDataObjectJson(data[i], zipFolderPath+ @"\" + filename, fileMode);
             }
-            ZipFile.CreateFromDirectory(zipFolderPath, ZipPath);
+            ZipFile.CreateFromDirectory(zipFolderPath, zipFile);
 
         }
-        public List<Computer> ReadZip()
+        public List<Computer> ReadZip(string filename)
         {
-            ZipFile.ExtractToDirectory(ZipPath, extractPath);
-            return ReadDataJson(extractPath);
+            ZipFile.ExtractToDirectory(zipFile, extractFolder);
+            return ReadDataJson(extractFolder + @"\" + filename);
         }
         //public Task ReadAsync()
         //{

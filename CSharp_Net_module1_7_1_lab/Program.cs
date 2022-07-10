@@ -11,21 +11,25 @@ namespace CSharp_Net_module1_7_1_lab
     {
         static void Main(string[] args)
         {
-            string filename = "Computers.json";
-            string zipFileName = "result.zip";
-            List<Computer> list = new List<Computer> { new Computer(50, 4000, 8, 2000), new Computer(51, 5800, 16, 8000)};
-            InOutOperation operations = new InOutOperation();
+            //string filename = "Computers.json";
+            //List<Computer> list = new List<Computer> { new Computer(50, 4000, 8, 2000), new Computer(51, 5800, 16, 8000)};
+            //InOutOperation operations = new InOutOperation();
             //operations.WriteDataObjectJson(list[0], filename);
-           // operations.WriteDataObjectJson(list[1], filename);
-            //Console.WriteLine("Worked method : Write data !"); 
-            list = operations.ReadDataJson(filename);
-            Console.WriteLine("Worked method : Read data !");
-            foreach (var item in list)
-            { 
-                Console.WriteLine(item);
-            }
-            operations.WriteZip(list, filename);
-            Console.WriteLine(operations.ReadZip());
+            //operations.WriteDataObjectJson(list[1], filename);
+            //Console.WriteLine("Worked method : Write data !");
+            //list = operations.ReadDataJson(filename);
+            //Console.WriteLine("Worked method : Read data !");
+            //foreach (var item in list)
+            //{ 
+            //    Console.WriteLine(item);
+            //}
+            //List<Computer> computers = new List<Computer> { new Computer(53, 5000, 32, 10000)};
+            //operations.WriteZip(computers, filename);
+            //computers = operations.ReadZip(filename);
+            //foreach (Computer item in computers)
+            //{
+            //    Console.WriteLine(item); ;
+            //}
             
             // 3) create collection of computers;
             // set path to file and file name
